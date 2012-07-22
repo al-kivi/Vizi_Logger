@@ -1,0 +1,52 @@
+= ViziLogger
+
+== Introduction
+
+This gem module creates a pagelogger that can used to log the visit to each
+web page in a Ruby based web application (e.g., Ramaze, Rails). Each web page is
+logged in Common Log Format to support analysis by an external Web Log Analyzer
+
+== Installation
+
+Just run:
+
+    gem install vizi_logger
+
+The following code will simulate the implementation of the software in a Ruby 
+based web application. When used in a web application, the pagelogger should be
+called with the following:
+
+	weblog.page page_url  # where page_url provides the url information
+
+The following example will allow for the testing of the gem in your development
+environment.
+
+You will need a Web Log Analyzer program to review the results of your application
+logging. The output of this gem has been tested with the Summary web log analyzer.
+Check it out at www.summary.net.
+
+== Usage
+	 
+	require 'rubygems'   # needed for ruby 1.8.7
+	require 'vizi_logger'
+
+	# weblog = Vizi::PageLogger.new(STDOUT)
+
+	weblog = Vizi::PageLogger.new('./log/vizidemo.log',shift_age = 'weekly')
+
+	weblog.addremote '127.0.0.1'  # for batch testing
+	# weblog.addremote request.remote_addr  # use this in live mode
+
+	weblog.formatter=Vizi::LogFormatter.new
+
+	urlist = ["/","/users/login","/users/list","/posts","/posts/view/1"]
+
+	25.times do
+		sleep rand*2  # create random interval
+		page_url = urlist[(5*rand).to_i]  # select a random page url
+		weblog.page page_url
+	end
+
+== License
+
+This code is made available under the MIT license.
